@@ -1,0 +1,188 @@
+{
+	"version": "0",
+	"id": "b6119d08-02af-4d18-a8aa-924ab7a312de",
+	"detail-type": "AWS API Call via CloudTrail",
+	"source": "aws.ec2",
+	"account": "157874033684",
+	"time": "2016-12-02T12:12:20Z",
+	"region": "eu-central-1",
+	"resources": [],
+	"detail": {
+		"eventVersion": "1.05",
+		"userIdentity": {
+			"type": "AssumedRole",
+			"principalId": "AROAJPAJBP4XEXFGSYVGE:Andreas.As.Krause@deutschebahn.",
+			"arn": "arn:aws:sts::157874033684:assumed-role/ServiceTeam/Andreas.As.Krause@deutschebahn.",
+			"accountId": "157874033684",
+			"accessKeyId": "ASIAIKO5ET23LGBN6UTQ",
+			"sessionContext": {
+				"attributes": {
+					"mfaAuthenticated": "false",
+					"creationDate": "2016-12-02T11:42:48Z"
+				},
+				"sessionIssuer": {
+					"type": "Role",
+					"principalId": "AROAJPAJBP4XEXFGSYVGE",
+					"arn": "arn:aws:iam::157874033684:role/ServiceTeam",
+					"accountId": "157874033684",
+					"userName": "ServiceTeam"
+				}
+			}
+		},
+		"eventTime": "2016-12-02T12:12:20Z",
+		"eventSource": "ec2.amazonaws.com",
+		"eventName": "RunInstances",
+		"awsRegion": "eu-central-1",
+		"sourceIPAddress": "81.200.198.120",
+		"userAgent": "console.ec2.amazonaws.com",
+		"requestParameters": {
+			"instancesSet": {
+				"items": [{
+					"imageId": "ami-d64e89b9",
+					"minCount": 1,
+					"maxCount": 1
+				}]
+			},
+			"instanceType": "t2.micro",
+			"blockDeviceMapping": {
+				"items": [{
+					"deviceName": "/dev/sda1",
+					"ebs": {
+						"volumeSize": 20,
+						"deleteOnTermination": true,
+						"volumeType": "gp2"
+					}
+				}]
+			},
+			"tenancy": "default",
+			"monitoring": {
+				"enabled": false
+			},
+			"disableApiTermination": false,
+			"instanceInitiatedShutdownBehavior": "stop",
+			"clientToken": "YtRXS1480680739506",
+			"networkInterfaceSet": {
+				"items": [{
+					"deviceIndex": 0,
+					"subnetId": "subnet-4e27e634",
+					"description": "Primary network interface",
+					"deleteOnTermination": true,
+					"groupSet": {
+						"items": [{
+							"groupId": "sg-fde7bd95"
+						}]
+					}
+				}]
+			},
+			"ebsOptimized": false
+		},
+		"responseElements": {
+			"requestId": "652747ef-8550-4bb3-b76a-8980d8df68da",
+			"reservationId": "r-00ba67ac4d5fc3fd2",
+			"ownerId": "157874033684",
+			"groupSet": {
+				
+			},
+			"instancesSet": {
+				"items": [{
+					"instanceId": "i-0bb705fe5b3dde59a",
+					"imageId": "ami-d64e89b9",
+					"instanceState": {
+						"code": 0,
+						"name": "pending"
+					},
+					"privateDnsName": "ip-10-52-167-141.eu-central-1.compute.internal",
+					"amiLaunchIndex": 0,
+					"productCodes": {
+						
+					},
+					"instanceType": "t2.micro",
+					"launchTime": 1480680739000,
+					"placement": {
+						"availabilityZone": "eu-central-1b",
+						"tenancy": "default"
+					},
+					"monitoring": {
+						"state": "disabled"
+					},
+					"subnetId": "subnet-4e27e634",
+					"vpcId": "vpc-27d8274f",
+					"privateIpAddress": "10.52.167.141",
+					"stateReason": {
+						"code": "pending",
+						"message": "pending"
+					},
+					"architecture": "x86_64",
+					"rootDeviceType": "ebs",
+					"rootDeviceName": "/dev/sda1",
+					"blockDeviceMapping": {
+						
+					},
+					"virtualizationType": "hvm",
+					"hypervisor": "xen",
+					"clientToken": "YtRXS1480680739506",
+					"interfaceId": "interface-0045fa7f",
+					"groupSet": {
+						"items": [{
+							"groupId": "sg-fde7bd95",
+							"groupName": "ssh_only"
+						}]
+					},
+					"sourceDestCheck": true,
+					"networkInterfaceSet": {
+						"items": [{
+							"networkInterfaceId": "eni-f85ffb87",
+							"internalInterfaceId": "interface-0045fa7f",
+							"subnetId": "subnet-4e27e634",
+							"vpcId": "vpc-27d8274f",
+							"availabilityZone": "eu-central-1b",
+							"description": "Primary network interface",
+							"ownerId": "157874033684",
+							"requesterManaged": false,
+							"status": "in-use",
+							"macAddress": "06:14:23:ae:17:07",
+							"privateIpAddress": "10.52.167.141",
+							"privateD nsName": "ip-10-52-167-141.eu-central-1.compute.internal",
+							"sourceDestCheck": true,
+							"groupSet": {
+								"items": [{
+									"groupId": "sg-fde7bd95",
+									"groupName": "ssh_only"
+								}]
+							},
+							"attachment": {
+								"attachmentId": "eni-attach-71a7f6f1",
+								"instanceId": "i-0bb705fe5b3dde59a",
+								"instanceOwnerId": "157874033684",
+								"deviceIndex": 0,
+								"status": "attaching",
+								"attachTime": 1480680739000,
+								"deleteOnTermination": true
+							},
+							"attachableToInstanceBySet": {
+								
+							},
+							"associableWithElasticIpBySet": {
+								
+							},
+							"privateIpAddressesSet": {
+								"item": [{
+									"privateIpAddress": "10.52.167.141",
+									"privateDnsName": "ip-10-52-167-141.eu-central-1.compute.internal",
+									"primary": true
+								}]
+							},
+							"tagSet": {
+								
+							}
+						}]
+					},
+					"ebsOptimized": false
+				}]
+			}
+		},
+		"requestID": "652747ef-8550-4bb3-b76a-8980d8df68da",
+		"eventID": "25d3b0da-4d9b-47e4-a81f-44af725b2846",
+		"eventType": "AwsApiCall"
+	}
+}
