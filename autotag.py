@@ -1,9 +1,10 @@
 from __future__ import print_function
 import json
-import boto3
+import boto3, botocore
 import logging
 import time
-import datetime, sys
+import datetime, sys, pprint
+from boto3.dynamodb.conditions import Key, Attr
 #from collections import OrderedDict
 
 logging.basicConfig()
@@ -54,7 +55,7 @@ class TaggableResource():
         converts a boto list of tags to a dictionary 
         '''
         tagdict = {}
-        requiredtags = ['ApplicationName','Environment','CostReference','ApplicationID','TicketReference','SecurityContactMail','TechnicalContactMail']
+
         for tag in tags:
             tagdict[tag['Key']] = tag['Value']
         return tagdict
@@ -84,8 +85,8 @@ class TaggableResource():
         adds new tags to the resource
         provide new_tags as dict
         '''
-
         current_tags = self.get_tags()
+        # requiredtags = ['ApplicationName','Environment','CostReference','ApplicationID','TicketReference','SecurityContactMail','TechnicalContactMail']
 
         print("New_Tags: "+str(new_tags))
         print("Cur_Tags: "+str(current_tags))
@@ -128,10 +129,49 @@ class CloudWatchEvent():
             raise RuntimeError('Not responseElements found')
 
 
+class dbdal():
+
+    def __init__(self):
+        self.ok = True
+        self.default_table = "account_tags"
+        self.db = boto3.client('dynamodb')
+        self.res = boto3.resource('dynamodb')
+
+
+    def create_table(self):
+        self.res.create_table(TableName=self.default_table,
+            KeySchema=[ {'AttributeName': 'AssumedRole', 'KeyType': 'HASH'},
+                        {'AttributeName': 'ApplicationName','KeyType': 'RANGE'}],
+            AttributeDefinitions=[{'AttributeName': 'ApplicationName', 'AttributeType': 'S'},
+                                      {'AttributeName': 'AssumedRole', 'AttributeType': 'S'}],
+            ProvisionedThroughput={'ReadCapacityUnits': 5,'WriteCapacityUnits': 5})
+
+
+    def query(self,key):
+        #self.db.quey(TableName=self.default_table, IndexName=assumed_role, Select='ALL_ATTRIBUTES'
+        #self.db.query(TableName=self.default_table, IndexName='assumed_role', Select='ALL_ATTRIBUTES')
+        table = self.res.Table(self.default_table)
+        try:
+            response = table.query(KeyConditionExpression=Key('AssumedRole').eq(key))
+            return response
+        except botocore.exceptions.ClientError as rex:
+            if "ResourceNotFoundException" in str(rex):
+                # table not found -> create table
+                self.create_table()
+
+
 def lambda_handler(event, context):
     ids = []
     cwe = CloudWatchEvent(event)
     ec2 = boto3.resource('ec2')
+
+    dal = dbdal()
+    res = dal.query(cwe.assumedrole)
+    pprint.pprint(res, indent=4)
+#    try:
+#        if not res['ResponseMetadata']['HTTPStatusCode'] == 200 and res['Count'] == 1:
+#            logger.warn(
+#    
 
     if cwe.eventname == 'CreateVolume':
         ids.append(cwe.detail['responseElements']['volumeId'])
