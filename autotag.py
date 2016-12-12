@@ -24,7 +24,6 @@ def to_tag_list(tagdict):
         tags.append({ key: value })
     return tags
 
-        
 
 class TaggableResource():
 
@@ -104,8 +103,40 @@ class TaggableResource():
         for key,value in current_tags.items():
             new_tags_list.append({ 'Key': key, 'Value': value })
 
+        print(new_tags_list)
+        self.save_tags(new_tags_list)
+
+
+    def save_tags(self, new_tags_list):
         self.resource.create_tags(Tags=new_tags_list)
         
+        
+class S3TaggableResource(TaggableResource):
+
+    def __init__(self, id):
+        self.id = id
+        self.type = "S3Bucket"
+        self.resource = None
+        self.client = boto3.client('s3')
+
+
+    def get_tags(self):
+        '''
+        returns the instances current tags as a simple dict i.e. {'Name': 'i-54543532', 'owner': 'teddy'}
+        '''
+        tags = {}
+        try:
+            response = self.client.get_bucket_tagging(Bucket=self.id)
+            if 'TagSet' in response:
+                return self._to_tag_dict(response['TagSet'])
+            else:
+                return tags
+        except:
+            return tags
+
+
+    def save_tags(self, new_tags_list):
+        response = self.client.put_bucket_tagging(Bucket=self.id,Tagging={'TagSet': new_tags_list })
 
 
 class CloudWatchEvent():
@@ -125,8 +156,8 @@ class CloudWatchEvent():
         else:
             self.user = self.principal.split(':')[1]
 
-        if not self.detail['responseElements']:
-            raise RuntimeError('Not responseElements found')
+        #if not self.detail['responseElements']:
+        #    raise RuntimeError('Not responseElements found')
 
 
 class dbdal():
@@ -167,13 +198,22 @@ def lambda_handler(event, context):
 
     dal = dbdal()
     res = dal.query(cwe.assumedrole)
-    pprint.pprint(res, indent=4)
+#    pprint.pprint(res, indent=4)
 #    try:
 #        if not res['ResponseMetadata']['HTTPStatusCode'] == 200 and res['Count'] == 1:
 #            logger.warn(
 #    
 
-    if cwe.eventname == 'CreateVolume':
+    if cwe.eventname == 'CreateBucket':
+        bucketname = cwe.detail['requestParameters']['bucketName']
+        bucket = S3TaggableResource(bucketname)
+        tags = bucket.get_tags()
+        #pprint.pprint(tags, indent=4)
+        bucket.add_tags({'ApplicationName': 'foobar'})
+
+        #tagS3Bucket(bucketname)
+        #logger.info(ids)
+    elif cwe.eventname == 'CreateVolume':
         ids.append(cwe.detail['responseElements']['volumeId'])
         #logger.info(ids)
     elif cwe.eventname == 'CreateImage':
@@ -222,7 +262,8 @@ def lambda_handler(event, context):
 
 
 if __name__ == "__main__":
-    with open('ec2run.json') as json_data:
+    #with open('ec2run.json') as json_data:
+    with open('s3run.json') as json_data:
         d = json.load(json_data)
         json_data.close()
         lambda_handler(d, 'context')    

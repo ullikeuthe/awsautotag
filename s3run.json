@@ -1,0 +1,49 @@
+{
+	"version": "0",
+	"id": "4cb3953b-db42-473f-a68d-7c53266436c4",
+	"detail-type": "AWS API Call via CloudTrail",
+	"source": "aws.s3",
+	"account": "157874033684",
+	"time": "2016-12-12T07:26:13Z",
+	"region": "eu-central-1",
+	"resources": [],
+	"detail": {
+		"eventVersion": "1.04",
+		"userIdentity": {
+			"type": "AssumedRole",
+			"principalId": "AROAIYZX2FA6773EUN5YC:ullikeuthe",
+			"arn": "arn:aws:sts::157874033684:assumed-role/AccountMaster/ullikeuthe",
+			"accountId": "157874033684",
+			"sessionContext": {
+				"attributes": {
+					"mfaAuthenticated": "false",
+					"creationDate": "2016-12-12T07:19:12Z"
+				},
+				"sessionIssuer": {
+					"type": "Role",
+					"principalId": "AROAIYZX2FA6773EUN5YC",
+					"arn": "arn:aws:iam::157874033684:role/AccountMaster",
+					"accountId": "157874033684",
+					"userName": "AccountMaster"
+				}
+			}
+		},
+		"eventTime": "2016-12-12T07:26:13Z",
+		"eventSource": "s3.amazonaws.com",
+		"eventName": "CreateBucket",
+		"awsRegion": "eu-central-1",
+		"sourceIPAddress": "54.239.6.12",
+		"userAgent": "[S3Console/0.4]",
+		"requestParameters": {
+			"CreateBucketConfiguration": {
+				"LocationConstraint": "eu-central-1",
+				"xmlns": "http://s3.amazonaws.com/doc/2006-03-01/"
+			},
+			"bucketName": "ullikeuthe12345"
+		},
+		"responseElements": null,
+		"requestID": "921E318F59729463",
+		"eventID": "0b039ac9-934b-4bb1-8aa8-a8675101e6ce",
+		"eventType": "AwsApiCall"
+	}
+}
